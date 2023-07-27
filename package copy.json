@@ -1,0 +1,64 @@
+{
+  "name": "smartix-policy-pe-adapter",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "test": "jest --collectCoverage --forceExit --detectOpenHandles",
+    "jest-coverage": "jest --coverage"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
+    "setupFiles": [
+      "./test/jest.setup.js"
+    ],
+    "moduleNameMapper": {
+      "^@src/(.*)$": "<rootDir>/$1"
+    },
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 60,
+        "lines": 80
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.4",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "sf-libs/axios-http-service": "^1.0.6",
+    "sf-libs/env-checker": "^1.0.0",
+    "sf-libs/routing-controllers-controllers": "^1.0.4",
+    "sf-libs/routing-controllers-middlewares": "^1.1.4",
+    "sf-libs/winston-logger": "^1.0.1",
+    "class-transformer": "^0.5.1",
+    "class-transformer-validator": "^0.9.1",
+    "cors": "^2.8.5",
+    "dd-trace": "^3.9.3",
+    "dotenv": "^16.0.3",
+    "moment": "^2.29.4",
+    "routing-controllers": "^0.10.0",
+    "sha256": "^0.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://__NEXUS_URL__"
+  }
+}

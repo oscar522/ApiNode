@@ -1,0 +1,14 @@
+include:
+  - project: 'fif/seguros/devops/ci-templates/pipeline'
+    ref: 'nodejs-helm'
+    file: '/node/template-aks.yml'
+ 
+variables:
+  NPM_BUILD_ARGS: ''
+  NPM_COVERAGE_SCRIPT: jest-coverage
+  NPM_TEST_SCRIPT: test
+  PORT: 3001
+  EXPOSED: 'false'
+  KEY_VAULT_DEV: 'kv-sxpcypeadpt-dev-2c91'
+  KEY_VAULT_QA: 'kv-sxpcypeadpt-qa-d98c'
+  KEY_VAULT_PROD: 'kv-sxpcypeadpt-prod-fc46'
