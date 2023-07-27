@@ -7,23 +7,22 @@ import { response } from '../../../domain/models/response';
 import { CronometerTime } from '../../utils/CronometerTime/CronometerTime';
 import { http_status_codes } from '../../utils/http-status-code';
 import { GetSmartixCustomerUseCase } from '../../../domain/usecases/consumerSmartix/smartixCustomer.usecase';
-import { logger } from '@sf-libs/winston-logger';
 import { envVars } from '../../utils/env-vars.config/env-vars.config';
-
+const logger = require('winston');
 export class processConsumerSmartix implements GetSmartixCustomerUseCase {
   private getServiceConsumerSmartix = new serviceSmartix();
   private Cronometer_ = new CronometerTime()
 
   async processSmartixCustomerRequest(req : identificationDocument, queryParams : any [], idProporsal : string): Promise<response> {
     this.Cronometer_.setInitTime(new Date());
-    logger.info(`Making request to processConsumerSmartix Domain/UseCases:`,{ headers : req} )
+    logger.info(`Making request to processConsumerSmartix Domain/UseCases:` + req )
 
     const tokenLoginSmartix = await this.getSmatixLogin();
     const responseSmatixService = await this.getSmatixService(req, tokenLoginSmartix.data, queryParams, idProporsal );
 
     const time = this.Cronometer_.getInteval(new Date())
 
-    logger.info(`Making request to processConsumerSmartix Domain/UseCases: => Interval Time : ${time} ms`, { Request: req, Response : responseSmatixService });
+    logger.info(`Making request to processConsumerSmartix Domain/UseCases: => Interval Time : ${time} ms`);
     return responseSmatixService
   }
 
@@ -33,7 +32,7 @@ export class processConsumerSmartix implements GetSmartixCustomerUseCase {
     // valida token 
     const resultValidation = await this.ValidationTokenGenerate()
     const body = new BodySmartixLogin();
-    logger.info(`Making request to processConsumerSmartix Login Domain/UseCases:`,{ body : body.getBody()} )
+    logger.info(`Making request to processConsumerSmartix Login Domain/UseCases:` )
 
     const time = this.Cronometer_.getInteval(new Date())
 
@@ -41,7 +40,7 @@ export class processConsumerSmartix implements GetSmartixCustomerUseCase {
 
       const response  = await this.getServiceConsumerSmartix.getService(body.getBody(), 1)
 
-      logger.info(`Making request to processConsumerSmartix Login new Domain/UseCases: => Interval Time : ${time} ms`, { validationToken : resultValidation });
+      logger.info(`Making request to processConsumerSmartix Login new Domain/UseCases: => Interval Time : ${time} ms`);
       return response
 
     } else {
@@ -51,7 +50,7 @@ export class processConsumerSmartix implements GetSmartixCustomerUseCase {
         data : new envVars().get('tokenLogin'),
       }
 
-      logger.info(`Making request to processConsumerSmartix Login recycler Domain/UseCases: => Interval Time : ${time} ms`, { validationToken : resultValidation });
+      logger.info(`Making request to processConsumerSmartix Login recycler Domain/UseCases: => Interval Time : ${time} ms`);
       return response
     }
 
@@ -61,7 +60,7 @@ export class processConsumerSmartix implements GetSmartixCustomerUseCase {
     this.Cronometer_.setInitTime(new Date());
 
     const body = new BodySmartix();
-    logger.info(`Making request to processConsumerSmartix Consumer Domain/UseCases:`,{ req : req , body : body.getBody(req, tokenLoginSmartix, queryParams, idProporsal ) } )
+    logger.info(`Making request to processConsumerSmartix Consumer Domain/UseCases:` )
     
     let type : number  = 0 
     if (idProporsal != "") 
@@ -73,7 +72,7 @@ export class processConsumerSmartix implements GetSmartixCustomerUseCase {
 
     const time = this.Cronometer_.getInteval(new Date())
 
-    logger.info(`Making request to processConsumerSmartix Consumer Domain/UseCases: => Interval Time : ${time} ms`, { body : body });
+    logger.info(`Making request to processConsumerSmartix Consumer Domain/UseCases: => Interval Time : ${time} ms`);
 
     return respose;
   }

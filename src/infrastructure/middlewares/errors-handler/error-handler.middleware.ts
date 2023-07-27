@@ -1,12 +1,13 @@
-import { logger } from '@sf-libs/winston-logger'
+
 import { ExpressErrorMiddlewareInterface, Middleware } from 'routing-controllers'
 import { envVars } from '../../../application/utils/env-vars.config/env-vars.config'
+const logger = require('winston');
 
 @Middleware({ type: 'after' })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
 	public error(error: any, request: any, response: any, next: (err?: any) => any): void {
 		error.status = parseInt(error.status) || error.httpCode || 500
-		const errorResponse = this.processError(error)
+  		const errorResponse = this.processError(error)
 		logger.info(JSON.stringify(errorResponse))
 
 		response.status(parseInt(error.status)).json(errorResponse)

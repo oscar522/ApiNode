@@ -1,5 +1,3 @@
-import { logger } from "@sf-libs/winston-logger"
-
 export class envVars {
     get (variable : any) {
         var value = process.env[variable]

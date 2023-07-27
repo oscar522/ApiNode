@@ -1,4 +1,3 @@
-import { logger } from '@sf-libs/winston-logger';
 import { transformAndValidate } from "class-transformer-validator";
 import { CronometerTime } from '../../../application/utils/CronometerTime/CronometerTime';
 import { envVars } from '../../../application/utils/env-vars.config/env-vars.config';
@@ -7,16 +6,16 @@ import { DtoListProposal } from '../../models/ResposeDto/DtoResponseListPolicy';
 import { DtoProposal } from '../../models/ResposeDto/DtoResponsePolicy';
 import { typeService } from '../../models/enumTypeService';
 import  'reflect-metadata'
-import { RequestConfig } from '@sf-libs/axios-http-service/dist/http/axios-http-service.interface';
 import { response } from '../../models/response';
 
 const Cronometer_ = new CronometerTime()
+const logger = require('winston');
 
 export class serviceSmartix {
 
     async getService(req : any, type : number) {
         Cronometer_.setInitTime(new Date());
-        logger.info(`Making request to getService infrastructure :`,{ request : req} )
+        logger.info(`Making request to getService infrastructure :`)
 
         // validacion del servicio a consumir
         let urlService : string = "";
@@ -25,21 +24,21 @@ export class serviceSmartix {
         else
             urlService = new envVars().get('URL_LOGIN_SMARTIX')
 
-        const requestConfig : RequestConfig = {
-            url : urlService,
-            data : JSON.stringify(req),
-            config : {
-                headers: { "Content-Type" : "application/json" },
-            },
-            //timeout : 10000,
+        // const requestConfig : RequestConfig = {
+        //     url : urlService,
+        //     data : JSON.stringify(req),
+        //     config : {
+        //         headers: { "Content-Type" : "application/json" },
+        //     },
+        //     //timeout : 10000,
 
-        }
-        const getResult : any = await ServiceConsumer.post(requestConfig);
-
+        // }
+        // const getResult : any = await ServiceConsumer.post(requestConfig);
+        const getResult : any ={}
         const resultMapping : any = await this.mappingResponse(getResult , type)
 
         const time = Cronometer_.getInteval(new Date())
-        logger.info(`Making request to getService infrastructure : => Interval Time : ${time} ms, Url :  ${urlService}  `, { });
+        logger.info(`Making request to getService infrastructure : => Interval Time : ${time} ms, Url :  ${urlService}  `);
 
         return resultMapping
 
@@ -97,7 +96,7 @@ export class serviceSmartix {
         } catch (error) {
 
             const time = Cronometer_.getInteval(new Date())
-            logger.info(`Making request to mappingResponse infrastructure error : => Interval Time : ${time} ms`, { error : "the answer is not as expected" + (type == 1 ? "Login Smartix IC" : "Get data Smartix IC") , details : error });
+            logger.info(`Making request to mappingResponse infrastructure error : => Interval Time : ${time} ms`);
             error.name = "the answer is not as expected in " + (type == 1 ? "Login Smartix IC" : "Get data Smartix IC")
             error.status = 503
             throw error
@@ -113,13 +112,13 @@ export class serviceSmartix {
         .then((userObject: any) => {
             // now you can access all your class prototype method
             const time = Cronometer_.getInteval(new Date())
-            logger.info(`Making request to mappingResponse Domian : => Interval Time : ${time} ms`, {  });
+            logger.info(`Making request to mappingResponse Domian : => Interval Time : ${time} ms`);
             return userObject
 
         })
         .catch(err => {
             const time = Cronometer_.getInteval(new Date())
-            logger.info(`Making request to mappingResponse Domian error : => Interval Time : ${time} ms`, { error : "the answer is not as expected" , details : err });
+            logger.info(`Making request to mappingResponse Domian error : => Interval Time : ${time} ms` );
             throw ({status : 503, name :  "the answer is not as expected transformAndValidate" , errors : err })
         });
     }

@@ -1,7 +1,8 @@
-import { logger } from "@sf-libs/winston-logger"
+
 import { checkHash256 } from "../../../application/utils/checkHash256/utils"
 import { http_status_codes } from "../../../application/utils/http-status-code"
 import { MetadataValidation } from "../../../application/utils/metadataValidation/metadata.validation"
+const logger = require('winston');
 
 export class SmartixGetValidation {
 
@@ -10,6 +11,7 @@ export class SmartixGetValidation {
       this.dataValidation = dataValidation
     }
     async GetMetadataValidation(){
+
       const metadata = new MetadataValidation(this.dataValidation.request)
       const getValidateMetada  = await metadata.validateMetada()
       const getMetaData = await metadata.getMetadata()
@@ -20,7 +22,7 @@ export class SmartixGetValidation {
 
       if (getValidateMetada.length > 0) {
   
-        logger.error(`Making request to PolicySmartixRoute Error GetMetadataValidation => Interval Time : ${time} ms `, { Request: this.dataValidation.request.headers, Response : {"getValidateMetada": getValidateMetada} });
+        logger.error(`Making request to PolicySmartixRoute Error GetMetadataValidation => Interval Time : ${time} ms `);
         
         throw ({status : 400, message : "header not valid" , errors : getValidateMetada })
 
@@ -47,7 +49,7 @@ export class SmartixGetValidation {
   
       if (!validateHash) {
         const time = Cronometer_.getInteval(new Date())
-        logger.error(`Making request to PolicySmartixRoute Error GetValidateHash => Interval Time : ${time} ms `, { Request: Request.headers, Response : {"message": "Bad request"} });
+        logger.error(`Making request to PolicySmartixRoute Error GetValidateHash => Interval Time : ${time} ms `);
         throw ({status : 400, message : "validate url encryption" , errors : "" })
   
       }else{
